@@ -735,7 +735,7 @@ class CairoGraphics
 					var c = data.readBeginShaderFill();
 					var shaderBuffer = c.shaderBuffer;
 
-					if (shaderBuffer.inputCount > 0)
+					if (shaderBuffer.inputCount > 0 #if hl && shaderBuffer.inputs[0].image != null #end)
 					{
 						fillPattern = createImagePattern(shaderBuffer.inputs[0], null, shaderBuffer.inputWrap[0] != CLAMP,
 							shaderBuffer.inputFilter[0] != NEAREST);
