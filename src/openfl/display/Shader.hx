@@ -570,6 +570,8 @@ class Shader
 
 	@:noCompletion private function __processGLData(source:String, storageType:String):Void
 	{
+		static final storedMatches = new Map<String, Array<{type:String, name:String}>>();
+
 		var lastMatch = 0, position, regex, name, type;
 
 		if (storageType == "uniform")
@@ -581,10 +583,34 @@ class Shader
 			regex = ~/attribute ([A-Za-z0-9]+) ([A-Za-z0-9_]+)/;
 		}
 
-		while (regex.matchSub(source, lastMatch))
+		var key = storageType + source;
+
+		var isStored = storedMatches.exists(key);
+
+		var counter = 0;
+		var continueLoop = true;
+		while (continueLoop)
 		{
-			type = regex.matched(1);
-			name = regex.matched(2);
+			if (!isStored)
+			{
+				if (!storedMatches.exists(key)) storedMatches.set(key, []);
+
+				continueLoop = regex.matchSub(source, lastMatch);
+				if (!continueLoop) break;
+				type = regex.matched(1);
+				name = regex.matched(2);
+				storedMatches.get(key).push({type: type, name: name});
+			}
+			else
+			{
+				var stored = storedMatches.get(key);
+				continueLoop = counter < stored.length;
+				if (!continueLoop) break;
+				var temp = storedMatches.get(key)[counter];
+				type = temp.type;
+				name = temp.name;
+				counter++;
+			}
 
 			if (StringTools.startsWith(name, "gl_"))
 			{
@@ -723,8 +749,11 @@ class Shader
 				}
 			}
 
-			position = regex.matchedPos();
-			lastMatch = position.pos + position.len;
+			if (!isStored)
+			{
+				position = regex.matchedPos();
+				lastMatch = position.pos + position.len;
+			}
 		}
 	}
 
