@@ -2466,7 +2466,7 @@ class Stage extends DisplayObjectContainer #if lime implements IModule #end
 		var stack = [];
 		var target:InteractiveObject = null;
 
-		if (__hitTest(__mouseX, __mouseY, true, stack, true, this))
+		if (__hitTest(__mouseX, __mouseY, #if flixel false #else true #end, stack, true, this))
 		{
 			target = cast stack[stack.length - 1];
 		}
@@ -2826,7 +2826,7 @@ class Stage extends DisplayObjectContainer #if lime implements IModule #end
 
 				var stack = [];
 
-				if (__hitTest(__mouseX, __mouseY, true, stack, true, this))
+				if (__hitTest(__mouseX, __mouseY, #if flixel false #else true #end, stack, true, this))
 				{
 					dropTarget = stack[stack.length - 1];
 				}
@@ -2855,7 +2855,7 @@ class Stage extends DisplayObjectContainer #if lime implements IModule #end
 		var stack = [];
 		var target:InteractiveObject = null;
 
-		if (__hitTest(__mouseX, __mouseY, true, stack, true, this))
+		if (__hitTest(__mouseX, __mouseY, #if flixel false #else true #end, stack, true, this))
 		{
 			target = cast stack[stack.length - 1];
 		}
